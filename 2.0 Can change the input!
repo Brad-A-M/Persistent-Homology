@@ -43,3 +43,30 @@ Animate[
    Plot[x = 500, {x, -2, 2}, PlotRange -> {-2, 2}, Ticks -> False, 
     Axes -> False, AspectRatio -> 1, 
     Epilog -> {W, Point[L], q}]}], {t, 0, 4}]
+    
+    (*My machine was having touble displaying this. So below we make a table and save it as a .gif*)
+    PictureTable := 
+ Table[Column[{B := Table[Disk[Part[L, k], t/2], {k, 1, Length[L]}]; 
+    Plot[x = 500, {x, -2, 2}, PlotRange -> {-2, 2}, Ticks -> False, 
+     Epilog -> {Opacity[.5], B}, AspectRatio -> 1], 
+    W := Table[
+      If[t < Part[Part[r, z], 1], Point[{100, 1}], 
+       Line[{Part[Part[r, z], 2], Part[Part[r, z], 3]}]], {z, 1, 
+       Length[r]}]; Append[W, Q]; 
+    Plot[x = 500, {x, -2, 2}, PlotRange -> {-2, 2}, Ticks -> False, 
+     Axes -> False, AspectRatio -> 1, Epilog -> {W, Point[L]}], 
+    W := Table[
+      If[t < Part[Part[r, z], 1], Point[{100, 1}], 
+       Line[{Part[Part[r, z], 2], Part[Part[r, z], 3]}]], {z, 1, 
+       Length[r]}]; 
+    q := Table[
+      If[t < Part[Part[M, w], 1], Point[{100, 100}], 
+       Polygon[Part[Part[M, w], 2]]], {w, Length[M]}]; 
+    Plot[x = 500, {x, -2, 2}, PlotRange -> {-2, 2}, Ticks -> False, 
+     Axes -> False, AspectRatio -> 1, 
+     Epilog -> {W, Point[L], q}]}], {t, 0, 3, .2}]
+     
+     Export["PictureTable.gif", PictureTable, "GIF", 
+ "AnimationRepetitions" -> 1, "ImageSize" -> 600, 
+ "DisplayDurations" -> ((30/Length[PictureTable]) & /@ 
+    Range[Length[PictureTable]])] 
