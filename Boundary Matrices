@@ -1,0 +1,57 @@
+(*Small Data Set*)
+L := List[{1, 0}, {1, 1}, {0, -1}];
+
+
+r := {}; For[j = 1, j <= Length[L], j++, 
+ For[i = j + 1, i <= Length[L], i++, 
+  AppendTo[r, {Sqrt[(Part[Part[L, j], 
+          1] - (Part[Part[L, i], 1]))^2 + (Part[Part[L, j], 
+          2] - (Part[Part[L, i], 2]))^2], {Part[Part[L, j], 1], 
+     Part[Part[L, j], 2]}, {Part[Part[L, i], 1], 
+     Part[Part[L, i], 
+      2]}}]]] (*Compute the pairwise distance, but record the points \
+that were used too!*)
+
+(*Compute the max distance for every subset of L of size 3 and record \
+which points were used*)H := Subsets[L, {3}]; M := 
+ Table[{Max[
+    EuclideanDistance[Part[Part[H, u], 1], Part[Part[H, u], 2]], 
+    EuclideanDistance[Part[Part[H, u], 1], Part[Part[H, u], 3]], 
+    EuclideanDistance[Part[Part[H, u], 2], Part[Part[H, u], 3]]], 
+   Part[H, u]}, {u, Length[H]}];
+   
+   (*Shows the data points growing the simplicial complex and the first \
+and second boundary maps*)
+
+Q := 
+ Table[Point[Part[L, e]], {e, 1, Length[L]}]; Animate[
+ GraphicsGrid[{{B := Table[Disk[Part[L, k], t/2], {k, 1, Length[L]}]; 
+    Plot[x = 500, {x, -2, 2}, PlotRange -> {-2, 2}, Ticks -> False, 
+     Epilog -> {Opacity[.5], B}, AspectRatio -> 1], 
+    W := Table[
+      If[t < Part[Part[r, z], 1], Point[{100, 1}], 
+       Line[{Part[Part[r, z], 2], Part[Part[r, z], 3]}]], {z, 1, 
+       Length[r]}]; 
+    q := Table[
+      If[t < Part[Part[M, w], 1], Point[{100, 100}], 
+       Polygon[Part[Part[M, w], 2]]], {w, Length[M]}]; 
+    Plot[x = 500, {x, -2, 2}, PlotRange -> {-2, 2}, Ticks -> False, 
+     Axes -> False, AspectRatio -> 1, 
+     Epilog -> {W, Point[L], 
+       q}]}, {{{If[t < EuclideanDistance[Part[L, 1], Part[L, 2]], 0, 
+        1], If[t < EuclideanDistance[Part[L, 1], Part[L, 3]], 0, 1], 
+       0}, {0, If[t < EuclideanDistance[Part[L, 1], Part[L, 3]], 0, 
+        1], If[t < EuclideanDistance[Part[L, 2], Part[L, 3]], 0, 
+        1]}, {If[t < EuclideanDistance[Part[L, 1], Part[L, 2]], 0, 1],
+        0, If[t < EuclideanDistance[Part[L, 2], Part[L, 3]], 0, 1]}} //
+      MatrixForm, {{If[
+        t < Max[EuclideanDistance[Part[L, 2], Part[L, 3]], 
+          EuclideanDistance[Part[L, 1], Part[L, 3]], 
+          EuclideanDistance[Part[L, 1], Part[L, 2]]], 0, 1]}, {If[
+        t < Max[EuclideanDistance[Part[L, 2], Part[L, 3]], 
+          EuclideanDistance[Part[L, 1], Part[L, 3]], 
+          EuclideanDistance[Part[L, 1], Part[L, 2]]], 0, 1]}, {If[
+        t < Max[EuclideanDistance[Part[L, 2], Part[L, 3]], 
+          EuclideanDistance[Part[L, 1], Part[L, 3]], 
+          EuclideanDistance[Part[L, 1], Part[L, 2]]], 0, 1]}} // 
+     MatrixForm}}], {t, 0, 3}]
