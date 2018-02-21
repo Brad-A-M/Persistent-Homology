@@ -20,10 +20,8 @@ which points were used*)H := Subsets[L, {3}]; M :=
     EuclideanDistance[Part[Part[H, u], 2], Part[Part[H, u], 3]]], 
    Part[H, u]}, {u, Length[H]}];
    
-   (*Shows the data points growing the simplicial complex and the first \
-and second boundary maps*)
-
-Q := 
+  (*Shows the data points growing the simplicial complex and the first \
+and second boundary maps*)Q := 
  Table[Point[Part[L, e]], {e, 1, Length[L]}]; Animate[
  GraphicsGrid[{{B := Table[Disk[Part[L, k], t/2], {k, 1, Length[L]}]; 
     Plot[x = 500, {x, -2, 2}, PlotRange -> {-2, 2}, Ticks -> False, 
@@ -37,14 +35,20 @@ Q :=
        Polygon[Part[Part[M, w], 2]]], {w, Length[M]}]; 
     Plot[x = 500, {x, -2, 2}, PlotRange -> {-2, 2}, Ticks -> False, 
      Axes -> False, AspectRatio -> 1, 
-     Epilog -> {W, Point[L], 
-       q}]}, {{{If[t < EuclideanDistance[Part[L, 1], Part[L, 2]], 0, 
-        1], If[t < EuclideanDistance[Part[L, 1], Part[L, 3]], 0, 1], 
-       0}, {0, If[t < EuclideanDistance[Part[L, 1], Part[L, 3]], 0, 
-        1], If[t < EuclideanDistance[Part[L, 2], Part[L, 3]], 0, 
-        1]}, {If[t < EuclideanDistance[Part[L, 1], Part[L, 2]], 0, 1],
-        0, If[t < EuclideanDistance[Part[L, 2], Part[L, 3]], 0, 1]}} //
-      MatrixForm, {{If[
+     Epilog -> {W, Point[L], q, 
+       Text[Style["b", Italic, FontSize -> 14], {1.2, 0}], 
+       Text[Style["c", Italic, FontSize -> 14], {.2, -1}], 
+       Text[Style["a", Italic, FontSize -> 14], {1.2, 
+         1}]}]}, {MatrixForm[{{If[
+        t < EuclideanDistance[Part[L, 1], Part[L, 2]], 0, 1], 
+       If[t < EuclideanDistance[Part[L, 1], Part[L, 3]], 0, 1], 
+       0}, {If[t < EuclideanDistance[Part[L, 1], Part[L, 2]], 0, 1], 
+       0, If[t < EuclideanDistance[Part[L, 2], Part[L, 3]], 0, 
+        1]}, {0, 
+       If[t < EuclideanDistance[Part[L, 1], Part[L, 3]], 0, 1], 
+       If[t < EuclideanDistance[Part[L, 2], Part[L, 3]], 0, 1]}}, 
+     TableHeadings -> {{"a", "b", "c"}, {"[a,b]", "[b,c]", "[a,c]"}}],
+     MatrixForm[{{If[
         t < Max[EuclideanDistance[Part[L, 2], Part[L, 3]], 
           EuclideanDistance[Part[L, 1], Part[L, 3]], 
           EuclideanDistance[Part[L, 1], Part[L, 2]]], 0, 1]}, {If[
@@ -53,5 +57,6 @@ Q :=
           EuclideanDistance[Part[L, 1], Part[L, 2]]], 0, 1]}, {If[
         t < Max[EuclideanDistance[Part[L, 2], Part[L, 3]], 
           EuclideanDistance[Part[L, 1], Part[L, 3]], 
-          EuclideanDistance[Part[L, 1], Part[L, 2]]], 0, 1]}} // 
-     MatrixForm}}], {t, 0, 3}]
+          EuclideanDistance[Part[L, 1], Part[L, 2]]], 0, 1]}}, 
+     TableHeadings -> {{"[a,b]", "[b,c]", 
+        "[a,c]"}, {"[a,b,c]"}}]}}], {t, 0, 3}]
