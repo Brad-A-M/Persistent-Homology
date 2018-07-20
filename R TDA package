@@ -1,0 +1,29 @@
+#Had to do some extra fun things to install the package on my office machine
+
+install.packages(pkgs = "FNN")
+install.packages(pkgs = "igraph")
+install.packages(pkgs = "scales")
+
+install.packages("C:\\Users\\mccoyb4\\Downloads\\TDA_1.6.2.zip", repos=NULL, type="source")
+library("TDA")
+
+#Generate a nice data set of two circles
+
+
+Circle1 <- circleUnif(60)
+Circle2 <- circleUnif(60, r = 1.5) + 4
+Circles <- rbind(Circle1, Circle2)
+plot(Circles, pch = 16, xlab = "",ylab = "")
+
+X <- Circles
+
+
+maxscale <- 5        # limit of the filtration
+maxdimension <- 1    # components and loops
+
+
+#make the images!
+DiagRips <- ripsDiag(X = Circles, maxdimension, maxscale, library = c("GUDHI", "Dionysus"), location = TRUE, printProgress = FALSE)
+plot(X)
+plot(DiagRips[["diagram"]],main = "Persistence Diagram")
+plot(DiagRips[["diagram"]], barcode = TRUE, main = "Barcode")
